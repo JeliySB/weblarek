@@ -98,3 +98,91 @@ Presenter - презентер содержит основную логику п
 `emit<T extends object>(event: string, data?: T): void` - инициализация события. При вызове события в метод передается название события и объект с данными, который будет использован как аргумент для вызова обработчика.  
 `trigger<T extends object>(event: string, context?: Partial<T>): (data: T) => void` - возвращает функцию, при вызове которой инициализируется требуемое в параметрах событие с передачей в него данных из второго параметра.
 
+## Данные
+
+Товар
+interface IProduct {
+  id: string;
+  description: string;
+  image: string;
+  title: string;
+  category: string;
+  price: number | null;
+}
+
+Покупатель
+interface IBuyer {
+  payment: TPayment;
+  email: string;
+  phone: string;
+  address: string;
+}
+
+interface IOrder extends IBuyer {
+  items: string[];
+  total: number;
+}
+
+### Класс Catalog
+Хранение товаров, которые можно купить в приложении. Хранит массив всех товаров, хранит товар, выбранный для подробного отображения;
+
+Конструктор класса не принимает параметров.
+
+Поля класса:
+`private _items: IProduct[]` - массив всех товаров из каталога.
+`private _preview: string | null` - товар, выбранный для подробного отображения.
+
+Методы класса:
+`setItems(items: IProduct[]): void` - сохранение массива товаров полученного в параметрах метода.
+`getItems(): IProduct[]` - получение массива товаров из модели.
+`getItem(id: string): IProduct | undefined` - получение одного товара по его id.
+`setPreview(item: IProduct): void` - сохранение товара для подробного отображения.
+`getPreview(): IProduct | undefined` - получение товара для подробного отображения.
+
+### Класс Cart
+Хранение товаров, которые пользователь выбрал для покупки
+
+Конструктор класса не принимает параметров.
+
+Поля класса:
+`private _items: IProduct[]` - хранит массив товаров, выбранных покупателем для покупки.
+
+Методы класса:
+`getItems(): IProduct[]` - получение массива товаров, которые находятся в корзине.
+`addItem(item: IProduct): void` - добавление товара, который был получен в параметре, в массив корзины.
+`removeItem(id: string): void` - удаление товара, полученного в параметре из массива корзины.
+`clear(): void` - очистка корзины.
+`getTotal(): number` - получение стоимости всех товаров в корзине.
+`getCount(): number` - получение количества товаров в корзине;
+`hasItem(id: string): boolean` - проверка наличия товара в корзине по его id, полученного в параметр методаю
+
+### Класс Order
+Данные покупателя, которые тот должен указать при оформлении заказа.
+
+Конструктор класса не принимает параметров.
+
+Поля класса:
+`private _payment: TPayment | null` - вид оплаты.
+`private _address: string` - адреc.
+`private _phone: string` - телефон.
+`private _email: string` - email.
+
+Методы класса:
+`setPayment(method: TPayment): void` - сохранение данных.
+`setAddress(address: string): void` - сохранение данных.
+`setPhone(phone: string): void`- сохранение данных.
+`setEmail(email: string): void` - сохранение данных.
+`getOrderData(): IBuyer` - получение всех данных покупателя;
+`clear(): void` - очистка данных покупателя.
+`validate(): Record<string, string>` - валидация данных.
+
+## Слой коммуникации
+
+### Класс ShopApi
+Этот класс будет использовать композицию, чтобы выполнить запрос на сервер с помощью метода get класса Api и будет получать с сервера объект с массивом товаров.
+
+`constructor(api: Api)` - В конструктор передается API.
+
+Методы класса:
+`getProductList(): Promise<IProduct[]>` - делает get запрос на эндпоинт /product/ и возвращает массив товаров.
+`sendOrder(order: IOrder): Promise<object>` - делает post запрос на эндпоинт /order/ и передаёт в него данные, полученные в параметрах метода..
