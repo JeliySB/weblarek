@@ -1,5 +1,5 @@
 import { Api } from '../base/Api';
-import type { IProduct, IOrder } from '../../types';
+import type { IProduct, IOrder, IOrderResult } from '../../types';
 
 export class ShopAPI {
   constructor(private api: Api) {}
@@ -9,7 +9,7 @@ export class ShopAPI {
     return res.items;
   }
 
-  async sendOrder(order: IOrder): Promise<object> {
+  async sendOrder(order: IOrder): Promise<IOrderResult> {
     return this.api.post('/order', order, 'POST');
   }
 }

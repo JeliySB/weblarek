@@ -1,10 +1,10 @@
 import './scss/styles.scss';
 import { apiProducts } from './utils/data';
-import { Catalog } from './components/models/catalog';
-import { Cart } from './components/models/cart';
-import { Order } from './components/models/order';
+import { Catalog } from './components/models/Catalog';
+import { Cart } from './components/models/Cart';
+import { Order } from './components/models/Order';
 import { Api } from './components/base/Api';
-import { ShopAPI } from './components/models/shopapi';
+import { ShopAPI } from './components/models/shopApi';
 import { API_URL } from './utils/constants';
 
 const catalog = new Catalog();
