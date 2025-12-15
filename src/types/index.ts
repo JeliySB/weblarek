@@ -35,3 +35,12 @@ export interface IOrderResult {
   id: string;
   total: number;
 }
+
+export interface ICardPreview extends IProduct {
+    inBasket?: boolean;
+    buttonDisabled?: boolean;
+}
+
+export interface ICardBasket extends IProduct {
+    index?: number;
+}
