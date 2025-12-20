@@ -21,8 +21,7 @@ export class Card<T extends IProduct> extends Component<T> {
     set title(value: string) {
         this._title.textContent = value;
     }
-
-    set price(value: number | null) {
+    set price(value: number |  null) {
         if (value === null) {
             this._price.textContent = 'Недоступно';
         } else {
@@ -31,7 +30,7 @@ export class Card<T extends IProduct> extends Component<T> {
     }
 
     set category(value: string) {
-      if (this._category) {
+      if (this._category)  {
             this._category.textContent = value;
 
             Object.values(categoryMap).forEach(className => {
@@ -45,9 +44,10 @@ export class Card<T extends IProduct> extends Component<T> {
         }
     }
 
+
     set image(value: string) {
         if (this._image) {
             this.setImage(this._image, value, this.title);
         }
-    }
+    } 
 }

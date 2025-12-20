@@ -19,10 +19,8 @@ export class Page extends Component<IPage> {
 
         this._gallery = ensureElement<HTMLElement>('.gallery', container);
         this._basketCounter = ensureElement<HTMLElement>('.header__basket-counter', container);
-        this._wrapper = ensureElement<HTMLElement>('.page__wrapper', container);
-        this._basketButton = ensureElement<HTMLElement>('.header__basket', container);
-
-        // Клик по корзине в хедере
+        this._wrapper = ensureElement<HTMLElement>('.page__wrapper', container)
+        this._basketButton = ensureElement<HTMLElement>('.header__basket', container)
         this._basketButton.addEventListener('click', () => {
             this.events.emit('basket:open');
         });
@@ -31,16 +29,15 @@ export class Page extends Component<IPage> {
     set gallery(items: HTMLElement[]) {
         this._gallery.replaceChildren(...items);
     }
-
     set basketCount(value: number) {
-        this._basketCounter.textContent = String(value);
+        this._basketCounter.textContent = String(value)
     }
 
     set locked(value: boolean) {
         if (value) {
             this._wrapper.classList.add('page__wrapper_locked');
         } else {
-            this._wrapper.classList.remove('page__wrapper_locked');
+            this._wrapper.classList.remove('page__wrapper_locked')
         }
     }
 }

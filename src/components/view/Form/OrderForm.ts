@@ -17,7 +17,6 @@ export class OrderForm extends Form<{
         button.addEventListener('click', () => {
           const method = button.name as TPayment;
           this.payment = method;
-
           this.events.emit('order:change', {
               field: 'payment',
               value: method

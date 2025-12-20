@@ -1,5 +1,6 @@
 import { IBuyer } from '../../types';
 import type { TPayment } from '../../types';
+import { IEvents } from '../base/Events';
 
 export class Order {
   private _payment: TPayment | null = null;
@@ -7,20 +8,26 @@ export class Order {
   private _phone = '';
   private _address = '';
 
+  constructor(protected events: IEvents) {}
+
   setPayment(method: TPayment) {
     this._payment = method;
+    this.events.emit('order:changed');
   }
 
   setEmail(email: string) {
     this._email = email;
+    this.events.emit('order:changed');
   }
 
   setPhone(phone: string) {
     this._phone = phone;
+    this.events.emit('order:changed');
   }
 
   setAddress(address: string) {
     this._address = address;
+    this.events.emit('order:changed');
   }
 
   getOrderData(): IBuyer {
@@ -37,16 +44,28 @@ export class Order {
     this._email = '';
     this._phone = '';
     this._address = '';
+    this.events.emit('order:changed');
   }
 
-  validate(): Record<string, string> {
+  validateStep1(): Record<string, string> {
     const errors: Record<string, string> = {};
-
-    if (!this._payment) errors.payment = 'Не выбран вид оплаты';
-    if (!this._email) errors.email = 'Укажите email';
-    if (!this._phone) errors.phone = 'Укажите телефон';
-    if (!this._address) errors.address = 'Укажите адрес';
-
+    if (!this._payment) errors.payment = 'Не выбран способ оплаты';
+    if (!this._address.trim()) errors.address = 'Укажите адрес доставки';
     return errors;
+  }
+
+  validateStep2(): Record<string, string> {
+    const errors: Record<string, string> = {};
+    if (!this._email.trim()) errors.email = 'Укажите email';
+    if (!this._phone.trim()) errors.phone = 'Укажите телефон';
+    return errors;
+  }
+
+  isValidStep1(): boolean {
+    return Object.keys(this.validateStep1()).length === 0;
+  }
+
+  isValidStep2(): boolean {
+    return Object.keys(this.validateStep2()).length === 0;
   }
 }
