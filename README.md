@@ -194,38 +194,27 @@ interface IOrder extends IBuyer {
 Управление главной страницей приложения.
 
 Конструктор:
-`constructor(container: HTMLElement)`
+`constructor(container: HTMLElement, events: IEvents)`
 
 Поля класса:
-`counter: HTMLElement` - счётчик количества товаров в корзине.
-`gallery: HTMLElement` - контейнер для карточек каталога.
-`basketButton: HTMLElement` - кнопка открытия корзины.
+`gallery: HTMLElement[]` - заменяет содержимое галереи карточками каталога
+`basketCount: number` - обновляет счётчик товаров в корзине
+`locked: boolean` - блокирует/разблокирует скролл страницы
 
-Методы класса:
-`setCounter(value: number): void` - обновляет текст счётчика.
-`renderCards(cards: HTMLElement[]): void` - заменяет содержимое галереи на массив карточек.
+### Класс Modal
+Управление модальным окном.
+
+Конструктор: 
+`constructor(container: HTMLElement, events: IEvents)`
+
+Сеттер: 
+`content: HTMLElement` - заменяет содержимое модального окна
+
+Методы: 
+`open(), close(), render()` - открывает окно при рендере
 
 ### Класс Card
 Базовый класс. Содержит заголовок, цену, изображение, категории, кнопки действия.
-
-Конструктор:
-`constructor(container: HTMLElement, actions?: { onClick?: (event: MouseEvent) => void })`
-
-Поля класса:
-`protected _title: HTMLElement` - название.
-`protected _price: HTMLElement` - цена.
-`protected _image?: HTMLImageElement` - изображение.
-`protected _category?: HTMLElement` - категория.
-`protected _button?: HTMLButtonElement` - кнопка.
-`protected _description?: HTMLElement` - описание.
-
-Сеттеры класса:
-`set title(value: string)`
-`set price(value: number | null)`
-`set image(value: string)`
-`set category(value: string)`
-`set buttonTitle(value: string)`
-`set disabled(value: boolean)`
 
 ### Класс CardCatalog
 Наследуйемый класс от Card. Карточка товара в каталоге.
@@ -236,141 +225,71 @@ interface IOrder extends IBuyer {
 ### Класс CardPreview
 Наследуйемый класс от Card. Карточка в модальном окне.
 
-Поля класса:
-`description: HTMLElement` - описание товара
-`actionButton: HTMLButtonElement` - кнопка Купить, Удалить из корзины.
-
 Сеттеры класса:
-`set description(value: string)`
+`description: string`,inBasket: boolean - купить/ удалить из корзины
 
-События класса:
-`card:add` - нажатие кнопки «В корзину».
-`card:remove` - нажатие кнопки «Удалить из корзины».
 
 ### Класс CardBasket
 Наследуйемый класс от Card. Карточка товара в корзине.
 
-Поля класса:
-`index: HTMLElement`- порядковый номер товара в корзине.
-`removeButton: HTMLButtonElement` - кнопка удаления.
 
 Сеттеры класса:
-`set index(value: number)`
-
-События класса:
-`card:remove` — нажатие кнопки удаления из корзины.
-
-### Класс Modal
-Управление модальным окном.
-
-Конструктор:
-`constructor(container: HTMLElement)`
-
-Поля класса:
-`container: HTMLElement` - элемент модального окна (modal)
-`content: HTMLElement` - контейнер (modal__content)
-`closeButton: HTMLButtonElement` - крестик
-
-Методы класса:
-`set content(value: HTMLElement)` - вставляет контент
-`open(): void` - добавляет класс modal_active, блокирует скролл страницы
-`close(): void` - убирает класс
-`render(data?: object): HTMLElement` - возвращает container
-
-События класса:
-`modal:close` - клик по крестику или за карточкой. 
+`index: number` - номер в списке
 
 ### Класс BasketView
 Отображение модального окна корзины, списка товаров, общей суммы.
 
-Поля класса:
-`list: HTMLElement` - список товаров
-`total: HTMLElement` - общая стоимость
-`orderButton: HTMLButtonElement` - кнопка Оформить
-`emptyMessage?: HTMLElement` - текст Корзина пуста
+Конструктор: 
+`constructor(container: HTMLElement, events: IEvents)`
 
-Методы класса:
-`set total(value: number)` - товаров в корзине.
-`set items(value: HTMLElement[])` - вставляет карточки в список
-`set valid(value: boolean)` - активирует/отключает кнопку оформления
+Сеттеры класса:
+`items: HTMLElement[]` - вставляет список карточек. коризна пуста
+`total: number`- общая стоимость
+`valid: boolean` - активирует/деактивирует кнопку «Оформить»
 
-События класса:
-`basket:order` - нажатие кнопки Оформить
 
 ### Класс Form<T>
 Базовый класс. Общий функционал для форм оформления заказа.
 
 Конструктор:
-`constructor(container: HTMLFormElement)`
+`constructor(container: HTMLFormElement, events: IEvents)`
 
-Поля класса:
-`submitButton: HTMLButtonElement` - подтверждение.
-`errors: HTMLElement` - блок с сообщениями об ошибках.
+Сеттеры класса:
+`valid: boolean` - управление кнопкой submit 
+`errors: Record<string, string>` отображение ошибок.
 
-Методы класса:
-`set valid(value: boolean)` - активирует/отключает кнопку submit
-`set errors(value: Record<string, string>)` - отображает ошибки.
-
-События класса:
-`form:change` - изменение поля формы
 
 ### Класс OrderForm
-Наследуйемый класс от Form. Первый шаг оформления — выбор оплаты и адрес доставки.
-
-Поля класса:
-`addressInput: HTMLInputElement` - адрес.
-`paymentButtons: HTMLButtonElement[]` — кнопки выбора оплаты (online/cash)
-
-Методы класса:
-`set payment(value: TPayment)` — выделяет выбранную кнопку.
-`set address(value: string)` - адресс.
-
-События класса:
-`order:next` - нажатие кнопки «Далее»
+Наследуйемый класс от Form. Первый шаг оформления (способ оплаты + адрес доставки). Управляет выделением кнопок оплаты (класс `button_alt-active`).
 
 ### Класс ContactForm
-Наследуйемый класс от Form. Второй шаг оформления — email и телефон.
-
-Поля класса:
-`emailInput: HTMLInputElement` - email
-`phoneInput: HTMLInputElement` - телефонв.
-
-Методы класса:
-`set email(value: string)`
-`set phone(value: string)`
-
-События класса:
-`order:submit` — нажатие кнопки Оплатить
+Наследуйемый класс от Form. Второй шаг оформления (email + телефон).
 
 ### Класс Success
-Успешное оформление заказа.
+Конструктор: 
+`constructor(container: HTMLElement, events: IEvents)`
 
-Поля класса:
-`total: HTMLElement` — сумма заказа
-`description: HTMLElement` — текст с id заказа
-`closeButton: HTMLButtonElement` - закрыть
+Сеттер: 
+`total: number` - отобржает списанную сумум
 
-Методы класса:
-`set total(value: number)`
-
-События класса:
-`success:close` - нажатие кнопки закрытия
+`success:close` - генерируется при клике по кнопке закрытия
 
 ## События приложения
 
 ### События View
-`card:select` — выбор карточки в каталоге
-`card:add` — добавить товар в корзину
-`card:remove` — удалить товар из корзины
-`basket:order` — перейти к оформлению заказа
-`order:next` — перейти к форме контактов
-`order:submit` — завершить заказ
-`modal:close` — закрытие модального окна
-`form:change` — изменение полей формы
-`success:close` — закрытие окна успеха
+`card:select`
+`card:in-basket-toggle`
+`basket:item:remove`
+`basket:open`
+`basket:order`
+`order:submit`
+`contacts:submit`
+`success:close`
+`modal:open` 
+`modal:close`
 
 ### События Model
-`catalog:changed` — изменился каталог товаров
-`preview:changed` — изменился выбранный для просмотра товар
-`cart:changed` — изменилось содержимое корзины
-`order:changed` — изменились данные покупателя
+`catalog:changed`
+`preview:changed`
+`cart:changed`
+`order:changed`
