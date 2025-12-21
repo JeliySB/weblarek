@@ -100,7 +100,7 @@ events.on('cart:changed', () => {
         const card = new CardBasket(cloneTemplate(cardBasketTemplate), events);
         return card.render({
             ...item,
-            index: index + 1
+            index
         });
     });
 
@@ -122,7 +122,7 @@ events.on('basket:open', () => {
         const card = new CardBasket(cloneTemplate(cardBasketTemplate), events);
         return card.render({
             ...item,
-            index: index + 1
+            index
         });
     });
 
