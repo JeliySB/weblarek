@@ -2,6 +2,7 @@ import { Component } from '../../base/Component';
 import { IProduct } from '../../../types';
 import { categoryMap } from '../../../utils/constants';
 import { ensureElement } from '../../../utils/utils';
+import { CDN_URL } from '../../../utils/constants';
 
 export class Card<T extends IProduct> extends Component<T> {
     protected _title: HTMLElement;
@@ -44,10 +45,19 @@ export class Card<T extends IProduct> extends Component<T> {
         }
     }
 
-
+    // изменено
     set image(value: string) {
-        if (this._image) {
-            this.setImage(this._image, value, this.title);
-        }
-    } 
+    if (this._image && value) {
+        const fullUrl = `${CDN_URL}/${value}`;
+        this.setImage(this._image, fullUrl, this.title || 'Товар');
+    }
 }
+    // render перенесен в класс card
+    render(data: T): HTMLElement {
+        if (data.id) {
+            this.container.dataset.id = data.id;
+        }
+        Object.assign(this, data);
+        return this.container;
+    }
+    }

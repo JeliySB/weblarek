@@ -13,16 +13,13 @@ export class CardBasket extends Card<ICardBasket> {
         this._index = ensureElement<HTMLElement>('.basket__item-index', container);
         this._removeButton = ensureElement<HTMLButtonElement>('.basket__item-delete', container);
         this._removeButton.addEventListener('click', () => {
-            this.events.emit('basket:item:remove', this._data)
+            const id = this.container.dataset.id;
+            if (id) {
+                this.events.emit('basket:item:remove', { id });
+            }
         });
     }
 
-    render(data: ICardBasket) {
-        this._data = data;
-        return super.render(data);
-    }
-
-    protected _data?: ICardBasket;
     set index(value: number) {
         this._index.textContent = String(value + 1)
     }

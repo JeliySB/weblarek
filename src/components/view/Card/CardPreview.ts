@@ -14,16 +14,12 @@ export class CardPreview extends Card<ICardPreview> {
         this._button = ensureElement<HTMLButtonElement>('.card__button', container);
 
         this._button.addEventListener('click', () => {
-            this.events.emit('card:in-basket-toggle', this._data);
+            const id = this.container.dataset.id;
+            if (id) {
+                this.events.emit('card:in-basket-toggle', { id });
+            }
         });
     }
-
-    render(data: ICardPreview) {
-        this._data = data;
-        return super.render(data);
-    }
-
-    protected _data?: ICardPreview;
 
     set description(value: string) {
         this._description.textContent = value;

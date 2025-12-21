@@ -7,14 +7,10 @@ export class CardCatalog extends Card<IProduct> {
         super(container);
 
         container.addEventListener('click', () => {
-            this.events.emit('card:select', this._data);
+            const id = this.container.dataset.id;
+            if (id) {
+                this.events.emit('card:select', { id });
+            }
         })
      }
-
-    render(data: IProduct) {
-        this._data = data;
-        return super.render(data)
-    }
-
-    protected _data?: IProduct
 }

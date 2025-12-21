@@ -7,33 +7,30 @@ export class OrderForm extends Form<{
     address: string;
 }> {
     protected _paymentButtons: NodeListOf<HTMLButtonElement>;
-    
+
     constructor(container: HTMLFormElement, events: IEvents) {
-      super(container, events);
+        super(container, events);
 
-      this._paymentButtons = container.querySelectorAll('.button_alt')
-
-      this._paymentButtons.forEach(button => {
-        button.addEventListener('click', () => {
-          const method = button.name as TPayment;
-          this.payment = method;
-          this.events.emit('order:change', {
-              field: 'payment',
-              value: method
-          });
+        this._paymentButtons = container.querySelectorAll('.button_alt');
+        this._paymentButtons.forEach(button => {
+            button.addEventListener('click', () => {
+            const method = button.name as TPayment;
+            this.payment = method;
+            this.events.emit(`${this.container.name}:change`, {
+                field: 'payment' as keyof this,
+                value: method
+            });
+            });
         });
-      });
     }
 
-    set payment(value: TPayment) {
-      this._paymentButtons.forEach(button => {
-          button.classList.toggle('button_alt-active', button.name === value)
-      });
+    set payment(value: TPayment | null) {
+        this._paymentButtons.forEach(button => {
+            button.classList.toggle('button_alt-active', button.name === value);
+        });
     }
 
     set address(value: string) {
-      const addressInput = this.container.elements.namedItem('address') as HTMLInputElement;
-      if (addressInput) {
-        addressInput.value = value;
-      }}
+        (this.container.elements.namedItem('address') as HTMLInputElement).value = value;
+    }
 }
