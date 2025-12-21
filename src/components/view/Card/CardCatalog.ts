@@ -1,4 +1,4 @@
-import { Card } from '../Card';
+import { Card } from './Card';
 import { IProduct } from '../../../types';
 import { IEvents } from '../../base/Events';
 

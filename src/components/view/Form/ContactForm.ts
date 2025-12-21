@@ -1,4 +1,4 @@
-import { Form } from '../Form';
+import { Form } from './Form';
 import { IEvents } from '../../base/Events';
 
 export class ContactForm extends Form<{

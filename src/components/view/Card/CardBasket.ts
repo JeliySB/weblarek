@@ -1,4 +1,4 @@
-import { Card } from '../Card';
+import { Card } from './Card';
 import { ICardBasket } from '../../../types';
 import { ensureElement } from '../../../utils/utils';
 import { IEvents } from '../../base/Events';
